@@ -1,0 +1,33 @@
+{
+  "name": "online-study",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiuYanChong/onlineStudy.git"
+  },
+  "keywords": [
+    "vue",
+    "koa"
+  ],
+  "author": "HiuYanChong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HiuYanChong/onlineStudy/issues"
+  },
+  "homepage": "https://github.com/HiuYanChong/onlineStudy#readme",
+  "dependencies": {
+    "koa": "^2.0.1",
+    "mongoose": "^4.8.5",
+    "vue": "^2.2.1",
+    "webpack": "^2.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.16.1",
+    "eslint-config-egg": "^3.2.0"
+  }
+}

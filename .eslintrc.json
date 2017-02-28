@@ -1,0 +1,14 @@
+{
+  "extends": "eslint-config-egg",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "array-bracket-spacing": "off",
+    "no-unused-vars": "off",
+    "no-else-return": "off",
+    "strict": "off",
+    "no-alert": "off"
+  }
+}
