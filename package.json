@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start_dev": "NODE_ENV=development nodemon index.js",
+    "test": " NODE_ENV=test mocha",
+    "lint": "eslint --ext .js .vue onlineStudy",
+    "lint-fix": "eslint --fix *.js onlineStudy"
   },
   "repository": {
     "type": "git",
@@ -22,12 +25,23 @@
   "homepage": "https://github.com/HiuYanChong/onlineStudy#readme",
   "dependencies": {
     "koa": "^2.0.1",
+    "koa-bodyparser": "^4.1.0",
+    "koa-json": "^2.0.2",
+    "koa-onerror": "^3.1.0",
+    "koa-router": "^7.0.1",
+    "log4js": "^1.1.1",
     "mongoose": "^4.8.5",
     "vue": "^2.2.1",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^3.16.1",
-    "eslint-config-egg": "^3.2.0"
+    "eslint-config-egg": "^3.2.0",
+    "koa-logger": "^2.0.1",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0"
+  },
+  "engines": {
+    "node": "7.6"
   }
 }

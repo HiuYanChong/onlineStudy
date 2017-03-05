@@ -1,8 +1,14 @@
 {
   "extends": "eslint-config-egg",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2017,
     "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "commonjs": true,
+    "amd": true
   },
   "rules": {
     "array-bracket-spacing": "off",
