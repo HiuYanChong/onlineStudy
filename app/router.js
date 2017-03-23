@@ -5,11 +5,8 @@ const router = new Router();
 const controller = require('./controller/index').controller;
 
 
-router.get('/home', function(ctx, next) {
-  ctx.body = 'hello home';
-});
-
-router.post('/add', controller.user.addUser);
+router.get('/', controller.home.home);
+router.post('/api/addUser', controller.user.addUser);
 
 exports.router = router;
 

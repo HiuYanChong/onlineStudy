@@ -2,6 +2,7 @@
 const fs = require('fs');
 const log4js = require('log4js');
 const logConfig = require('../../config/log');
+const isProd = process.env.NODE_ENV === 'production';
 
 
 const confirmPath = function(pathStr) {
@@ -35,14 +36,22 @@ const resLogger = log4js.getLogger('resLogger');
 // 封装错误日志
 logUtil.logError = function(ctx, error, resTime) {
   if (ctx && error) {
-    errorLogger.error(formatError(ctx, error, resTime));
+    const errorLog = formatError(ctx, error, resTime);
+    errorLogger.error(errorLog);
+    if (!isProd) {
+      console.error(errorLog);
+    }
   }
 };
 
 // 封装响应日志
 logUtil.logResponse = function(ctx, resTime) {
   if (ctx) {
-    resLogger.info(formatRes(ctx, resTime));
+    const resLog = formatRes(ctx, resTime);
+    resLogger.info(resLog);
+    if (!isProd) {
+      console.info(resLog);
+    }
   }
 };
 
