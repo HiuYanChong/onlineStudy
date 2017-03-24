@@ -1,9 +1,9 @@
 'use strict';
 
 const user = require('./user');
-const home = require('./home');
+const page = require('./page');
 
 exports.controller = {
   user,
-  home,
+  page,
 };

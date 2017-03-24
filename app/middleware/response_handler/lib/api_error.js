@@ -8,8 +8,8 @@ class ApiError extends Error {
     super();
     const errorInfo = ApiErrorNames.getErrorInfo(errorName);
     this.name = errorName;
-    this.code = errorInfo.errorCode;
-    this.message = errorInfo.errorMessage;
+    this.code = errorInfo.code;
+    this.message = errorInfo.message;
   }
 }
 

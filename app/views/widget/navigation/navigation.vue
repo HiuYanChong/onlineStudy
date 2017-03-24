@@ -10,12 +10,23 @@
         <el-menu-item index="2-4">运维与测试</el-menu-item>
         <el-menu-item index="2-5">大数据</el-menu-item>
       </el-submenu>
-      <el-submenu index="3" v-if="!isLogin" class="login">
+      <el-submenu index="3" v-show="!isLogin" class="login">
         <template slot="title">登录/注册</template>
-        <el-menu-item index="3-1">登录</el-menu-item>
-        <el-menu-item index="3-2">注册</el-menu-item>
+        <el-menu-item index="3-1">注册</el-menu-item>
+        <el-menu-item index="3-2">登录</el-menu-item>
+      </el-submenu>
+      <el-submenu index="4" v-show="isLogin" class="login">
+        <template slot="title">你好, {{ this.name }}</template>
+        <el-menu-item index="4-1">个人中心</el-menu-item>
+        <el-menu-item index="4-2">登出</el-menu-item>
       </el-submenu>
     </el-menu>
+
+
+    <loginDia ref="loginDia"></loginDia>
+
+    <registerDia ref="registerDia"></registerDia>
+
   </div>
 </template>
 
@@ -31,6 +42,8 @@
   import Vue from 'vue'
   import ElementUI from 'element-ui'
   import 'element-ui/lib/theme-default/index.css'
+  import loginDia from '../loginDia/loginDia.vue'
+  import registerDia from '../registerDia/registerDia.vue'
 
   Vue.use(ElementUI);
 
@@ -39,12 +52,53 @@
       return {
         activeIndex: '1',
         isLogin: false,
+        name: '',
+        role: '',
+        id: '',
       };
+    },
+    components: {
+      loginDia,
+      registerDia,
+    },
+    mounted() {
+      this.$http.get('/api/checkLogin').then(res => {
+        const data = res.body.data;
+        if (data && data.isLogin === true) {
+          this.isLogin = true;
+          this.name = data.name;
+          this.role = data.role;
+          this.id = data.id;
+        }
+      }, error => {
+        console.error(error);
+      })
     },
     methods: {
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        switch (key.toString()) {
+          case '3-1':
+            this.$refs.registerDia.dialogFormVisible = true;
+            break;
+          case '3-2':
+            this.$refs.loginDia.dialogFormVisible = true;
+            break;
+          case '4-1':
+            window.location.href = `/person/${this.id}`;
+            break;
+          case '4-2':
+            this.logout();
+            break;
+          default: break;
+        }
+      },
+      logout() {
+        this.$http.get('/api/logout').then(res => {
+          if (res.body.data.isLogout) {
+            window.location.href = '/';
+          }
+        });
       }
-    }
+    },
   }
 </script>

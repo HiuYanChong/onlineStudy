@@ -2,6 +2,7 @@
 
 const developmentEnv = require('./config/dev');
 const testEnv = require('./config/test');
+const prodEnv = require('./config/prod');
 const isProd = process.env.NODE_ENV === 'production';
 const webpackDevServer = require('./build/webpack-dev-server');
 
@@ -9,6 +10,7 @@ const webpackDevServer = require('./build/webpack-dev-server');
 const env = {
   development: developmentEnv,
   test: testEnv,
+  production: prodEnv,
 }[process.env.NODE_ENV || 'development'];
 
 const path = require('path');
@@ -19,6 +21,8 @@ const koaNunjucks = require('koa-nunjucks-2');
 const bodyParser = require('koa-bodyparser');
 const json = require('koa-json');
 const logger = require('koa-logger');
+const session = require('koa-session');
+const convert = require('koa-convert');
 const router = require('./app/router').router;
 const app = new koa();
 
@@ -30,6 +34,17 @@ app.use(mongo({
   timeout: 30000,
   log: false,
 }));
+
+// session
+app.keys = ['onlineStudy'];
+const SESSIONCONFIG = {
+  key: 'onlineStudy',
+  maxAge: 86400000,
+  overwrite: true,
+  httpOnly: true,
+  signed: true,
+};
+app.use(convert(session(SESSIONCONFIG, app)));
 
 // terminal logger
 if (env.env === 'development') {
@@ -54,7 +69,7 @@ app.use(json())
     ctx.body = ctx.request.body;
     await next();
   })
-  .use(middleware.responseHandler(/^api/))
+  .use(middleware.responseHandler(/^\/api/))
   .use(router.routes())
   .use(router.allowedMethods())
   .listen(env.port);
