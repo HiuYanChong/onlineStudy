@@ -6,6 +6,7 @@
 
 <style lang="sass">
   @import 'node_modules/reset-css/_reset';
+  @import 'app/views/style/gobal';
 </style>
 
 <script>
@@ -19,7 +20,8 @@
     },
     data () {
       return {
-
+        role: '',
+        uid: '',
       }
     },
     mounted() {

@@ -15,6 +15,7 @@ router.post('/api/addUser', controller.user.addUser);
 router.post('/api/login', controller.user.login);
 router.get('/api/checkLogin', controller.user.checkLogin);
 router.get('/api/logout', controller.user.logout);
+router.post('/api/uploadVideo', controller.file.uploadVideo);
 
 exports.router = router;
 

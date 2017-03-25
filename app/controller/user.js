@@ -1,14 +1,24 @@
 'use strict';
 const dbHandler = require('../utils/dbOperationHandler');
 const router = require('koa-router');
-const decryption = require('../utils/encryption');
 const ApiError = require('../middleware/response_handler/lib/api_error');
 const bcrypt = require('bcrypt');
+
+const checkValidityOfName = async(ctx, next, name) => {
+  const result = await ctx.mongo.collection('users').find({ name }).toArray();
+  return !result[0];
+};
 
 exports.addUser = async(ctx, next) => {
   const name = ctx.request.body.username;
   const role = ctx.request.body.role;
   let pass = ctx.request.body.password;
+  //  检查昵称是否注册
+  const nameValidity = await checkValidityOfName(ctx, next, name);
+  if (!nameValidity) {
+    const error = new ApiError('nameExist');
+    throw error;
+  }
   await bcrypt.hash(pass, 10).then(hash => {
     pass = hash;
   });
@@ -45,6 +55,8 @@ exports.login = async(ctx, next) => {
   }
   pass = pass.split(tid)[0];
   const result = await ctx.mongo.collection('users').find({ name }).toArray();
+  // 用户不存在
+  // TODO
   const password = result[0].pass;
   if (password) {
     await bcrypt.compare(pass, password).then(res => {

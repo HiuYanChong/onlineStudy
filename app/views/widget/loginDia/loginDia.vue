@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-dialog title="登录" v-model="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="昵称" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="昵称" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item type="password" label="密码" :label-width="formLabelWidth">
-          <el-input v-model="form.password" auto-complete="off"></el-input>
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+          <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -31,7 +31,15 @@
           name: '',
           password: '',
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        rules: {
+          name: [
+            { required: true, message: '请输入昵称', trigger: 'blur' },
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur'},
+          ]
+        }
       }
     },
     methods: {

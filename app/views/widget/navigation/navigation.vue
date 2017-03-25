@@ -44,6 +44,7 @@
   import 'element-ui/lib/theme-default/index.css'
   import loginDia from '../loginDia/loginDia.vue'
   import registerDia from '../registerDia/registerDia.vue'
+  import Bus from '../../component/bus.vue';
 
   Vue.use(ElementUI);
 
@@ -53,7 +54,7 @@
         activeIndex: '1',
         isLogin: false,
         name: '',
-        role: '',
+        role: '', // 1:老师 2:学生
         id: '',
       };
     },
@@ -69,6 +70,11 @@
           this.name = data.name;
           this.role = data.role;
           this.id = data.id;
+          Bus.$emit('CHECK_LOGIN_DONE', {
+            name: data.name,
+            role: data.role,
+            id: data.id,
+          });
         }
       }, error => {
         console.error(error);
