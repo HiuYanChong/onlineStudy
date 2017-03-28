@@ -10,18 +10,20 @@
       </el-row>
       <div class="class-area">
         <!-- 有课程 -->
-        <el-row v-show="classes[0]">
-          <el-col :span="6" v-for="(index, item) in classes" :offset="index > 0 ? 1 : 0">
-            <el-card :body-style="{ padding: '0px' }">
-              <img src="" class="image" alt="课程图片">
-              <div style="padding: 14px;">
-                <span>好吃的汉堡</span>
-                <div class="bottom clearfix">
-                  <time class="time">11111111111</time>
-                  <el-button type="text" class="button">操作按钮</el-button>
+        <el-row v-show="classes[0] && role === '1'">
+          <el-col :span="6" v-for="(item, index) in classes" :offset="index > 0 ? 1 : 0" >
+            <div class="lesson-card" @click="toLessonPage(index)">
+              <el-card :body-style="{ padding: '10px' }" class="lesson">
+                <img :src="'http://127.0.0.1:8080'+ item.coverImg" class="image" alt="课程图片">
+                <div style="padding: 14px;">
+                  <span>{{ item.name }}</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ item.createAt }}</time>
+                    <el-button type="text" class="button" @click.stop="modifyLesson(index)">编辑课程</el-button>
+                  </div>
                 </div>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </el-col>
         </el-row>
 
@@ -39,6 +41,9 @@
 
     <!-- 课程创建弹窗 -->
     <lessonCreation ref="lessonCreation"></lessonCreation>
+
+    <!-- 课程修改弹窗-->
+    <modifyLesson></modifyLesson>
   </div>
 </template>
 
@@ -61,6 +66,14 @@
     .class-area {
       border: 3px solid #EFF2F7;
       border-radius: 30px;
+    }
+
+    .lesson-card {
+      cursor: pointer;
+    }
+    
+    .lesson {
+      margin: 10px;
     }
 
     .no-class {
@@ -113,6 +126,7 @@
   //es6
   import navigation from '../../widget/navigation/navigation.vue';
   import lessonCreation from '../../widget/lessonCreation/lessonCreation.vue';
+  import modifyLesson from '../../widget/modifyLesson/modifyLesson.vue';
   import Bus from '../../component/bus.vue';
 
   export default {
@@ -120,6 +134,7 @@
     components: {
       navigation,
       lessonCreation,
+      modifyLesson,
     },
     data () {
       return {
@@ -129,9 +144,17 @@
       }
     },
     mounted() {
-      Bus.$on('CHECK_LOGIN_DONE', (userInfo) => {
+      Bus.$on('CHECK_LOGIN_DONE', userInfo => {
         this.role = userInfo.role;
         this.id = userInfo.id;
+        // 获取老师的开授课程
+        if (this.role === '1') {
+          this.getUserLesson();
+        }
+      });
+
+      Bus.$on('LESSON_CREATED', lessonInfo => {
+        this.classes.push(lessonInfo);
       });
     },
     computed: {
@@ -142,6 +165,29 @@
     methods: {
       createLesson() {
         this.$refs.lessonCreation.dialogFormVisible = true;
+      },
+      // 获取开授课程
+      getUserLesson() {
+        this.$http.post('/api/searchLessonByUserId', {
+          userId: this.id,
+        }).then(res => {
+          res.body.data.lesson.forEach(item => {
+            this.classes.push(item);
+          })
+        })
+      },
+      // 修改课程
+      modifyLesson(index) {
+        const lessonInfo = this.classes[index];
+        if (lessonInfo) {
+          Bus.$emit('MODIFY_LESSON', lessonInfo);
+        }
+      },
+      toLessonPage(index) {
+        console.log(index);
+        const lessonId = this.classes[index]._id;
+        console.log(lessonId);
+        window.location.href = `/lesson/${lessonId}`;
       }
     }
   }

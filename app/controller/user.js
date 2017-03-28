@@ -56,7 +56,10 @@ exports.login = async(ctx, next) => {
   pass = pass.split(tid)[0];
   const result = await ctx.mongo.collection('users').find({ name }).toArray();
   // 用户不存在
-  // TODO
+  if(!result[0]) {
+    const error = new ApiError('userNotExist');
+    throw error;
+  };
   const password = result[0].pass;
   if (password) {
     await bcrypt.compare(pass, password).then(res => {

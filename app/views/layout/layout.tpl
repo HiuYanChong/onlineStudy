@@ -17,10 +17,14 @@
   {% endblock %}
 </head>
 <body>
-<div id="app">
+<div id="body">
   <script src="http://localhost:8080/dist/vendor.js"></script>
+  {% block info %}
+  {% endblock %}
+  <div id="app">
   {% block app %}
   {% endblock %}
+  </div>
 </div>
 </body>
 </html>

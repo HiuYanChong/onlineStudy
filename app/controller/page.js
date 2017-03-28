@@ -7,3 +7,11 @@ exports.home = async(ctx, next) => {
 exports.person = async(ctx, next) => {
   await ctx.render('page/person/person', {});
 };
+
+exports.lesson = async(ctx, next) => {
+  const lessonId = ctx.params.id;
+  console.log(lessonId);
+  await ctx.render('page/lesson/lesson', {
+    lessonId,
+  });
+};

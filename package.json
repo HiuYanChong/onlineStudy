@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/HiuYanChong/onlineStudy#readme",
   "dependencies": {
+    "async-busboy": "^0.3.4",
     "bcrypt": "^1.0.2",
     "element-ui": "^1.2.5",
     "koa": "^2.0.1",
@@ -40,7 +41,9 @@
     "koa-session": "^5.0.0",
     "log4js": "^1.1.1",
     "md5": "^2.2.1",
+    "mongodb": "^2.2.25",
     "reset-css": "^2.2.0",
+    "video.js": "^5.19.0",
     "vue": "^2.2.1",
     "vue-resource": "^1.2.1",
     "vue-router": "^2.3.0",

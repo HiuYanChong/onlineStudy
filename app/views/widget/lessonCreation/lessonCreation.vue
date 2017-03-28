@@ -14,11 +14,21 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="课程封面图上传" :label-width="formLabelWidth" >
+          <el-upload
+              class="upload-demo"
+              action="/api/uploadImg"
+              :on-success="imgSuccess">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="视频文件上传" :label-width="formLabelWidth">
           <el-upload
               class="upload"
               drag
-              action="//jsonplaceholder.typicode.com/posts/"
+              action="/api/uploadVideo"
+              :on-success="videoSuccess"
               mutiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将视频文件拖到此处，或<em>点击上传</em></div>
@@ -36,6 +46,7 @@
 
 
 <script>
+  import Bus from '../../component/bus.vue';
   export default {
     data() {
       return {
@@ -71,13 +82,60 @@
           type: [
             { required: true, message: '请选择课程分类', trigger: 'blur'},
           ]
-        }
+        },
+        coverImg: [],
+        videoList: [],
+        userId: '',
       }
     },
+    mounted() {
+      Bus.$on('CHECK_LOGIN_DONE', userInfo => {
+        this.userId = userInfo.id;
+      });
+    },
     methods: {
+      reset() {
+        this.coverImg = [];
+        this.videoList = [];
+        this.form = {
+          name: '',
+          type: '',
+        };
+        this.dialogFormVisible = false;
+      },
       create() {
-
+        if(this.coverImg && this.videoList && this.userId) {
+          this.$http.post('/api/createLesson', {
+            name: this.form.name,
+            type: this.form.type,
+            coverImg: this.coverImg,
+            videoList: this.videoList,
+            userId: this.userId,
+          }).then(res => {
+            if (res.body.data) {
+              Bus.$emit('LESSON_CREATED', res.body.data);
+            }
+          });
+          this.reset();
+        }
+      },
+      // 上传图片回调
+      imgSuccess(res) {
+        console.log(res);
+        if(res.data) {
+          this.coverImg = res.data.src[0];
+        }
+      },
+      // 上传视频回调
+      videoSuccess(res, file) {
+        if(res.data) {
+          this.videoList.push({
+            src: res.data.src[0],
+            name: file.name,
+          });
+        }
       }
+      // 上传前
     }
   }
 </script>

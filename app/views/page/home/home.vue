@@ -25,14 +25,7 @@
       }
     },
     mounted() {
-      /*this.$http.post('/api/addUser', {
-        username: '111',
-        password: '222',
-      }).then(response => {
-        console.log(response);
-      }, response => {
-        console.log(response);
-      });*/
+
     }
   }
 </script>

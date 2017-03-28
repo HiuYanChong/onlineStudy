@@ -9,6 +9,8 @@ ApiErrorNames.DB_ERROR = 'dbOperationFailed';
 ApiErrorNames.Login_TIMEOUT = 'loginTimeOut';
 ApiErrorNames.NAME_EXIST = 'nameExist';
 ApiErrorNames.UPLOAD_EXISR = 'uploadFailed';
+ApiErrorNames.IMG_REQUIRED = 'imageRequired';
+ApiErrorNames.VIDEO_REQUIED = 'videoRequired';
 
 /**
  * API错误名称对应的错误信息
@@ -21,6 +23,8 @@ errorMap.set(ApiErrorNames.DB_ERROR, { code: 102, message: '数据库操作失�
 errorMap.set(ApiErrorNames.Login_TIMEOUT, { code: 103, message: '登录超时' });
 errorMap.set(ApiErrorNames.NAME_EXIST, { code: 104, message: '昵称已存在' });
 errorMap.set(ApiErrorNames.UPLOAD_EXISR, { code: 105, message: '上传失败' });
+errorMap.set(ApiErrorNames.IMG_REQUIRED, { code: 106, message: '文件不是图片文件' });
+errorMap.set(ApiErrorNames.VIDEO_REQUIED, { code: 107, message: '文件不是视频文件' });
 
 // 根据错误名称获取错误信息
 ApiErrorNames.getErrorInfo = (errorName) => {
