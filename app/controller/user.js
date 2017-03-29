@@ -3,6 +3,7 @@ const dbHandler = require('../utils/dbOperationHandler');
 const router = require('koa-router');
 const ApiError = require('../middleware/response_handler/lib/api_error');
 const bcrypt = require('bcrypt');
+const ObjectId = require('mongodb').ObjectId;
 
 const checkValidityOfName = async(ctx, next, name) => {
   const result = await ctx.mongo.collection('users').find({ name }).toArray();
@@ -22,7 +23,7 @@ exports.addUser = async(ctx, next) => {
   await bcrypt.hash(pass, 10).then(hash => {
     pass = hash;
   });
-  const result = await ctx.mongo.collection('users').insert({ name, pass, role });
+  const result = await ctx.mongo.collection('users').insertOne({ name, pass, role, lessonAttend: [] });
   const userId = result.ops[0]._id.toString();
   await dbHandler.dbOperationHander(ctx, result);
   ctx.session.user = {
@@ -105,4 +106,53 @@ exports.logout = async(ctx, next) => {
   ctx.body = {
     isLogout: 1,
   };
+};
+
+exports.attendLesson = async(ctx, next) => {
+  const userId = ctx.request.body.userId;
+  const lessonId = ctx.request.body.lessonId;
+  const result = await ctx.mongo.collection('users').updateOne(
+    { _id: ObjectId(userId) },
+    {
+      $addToSet: { lessonAttend: lessonId },
+      $currentDate: { lastModified: true },
+    }
+  );
+  await dbHandler.dbOperationHander(ctx, result);
+  ctx.body = {
+    attend: true,
+    lessonId,
+  };
+};
+
+exports.getAttendLesson = async(ctx, next) => {
+  const userId = ctx.request.body.userId;
+  const result = await ctx.mongo.collection('users').find({ _id: ObjectId(userId) }).toArray();
+  await dbHandler.dbOperationHander(ctx, result);
+  const lesson = result[0].lessonAttend;
+  ctx.body = {
+    lesson,
+  };
+};
+
+exports.quitLesson = async(ctx, next) => {
+  const userId = ctx.request.body.userId;
+  const lessonId = ctx.request.body.lessonId;
+  const result = await ctx.mongo.collection('users').updateOne(
+    { _id: ObjectId(userId) },
+    {
+      $pullAll: { lessonAttend: lessonId },
+      $currentDate: { lastModified: true },
+    }
+  );
+  await dbHandler.dbOperationHander(ctx, result);
+  ctx.body = {
+    quit: true,
+    lessonId,
+  };
+};
+
+
+exports.getAttendLessonInfo = async(ctx, next) =>{
+
 };

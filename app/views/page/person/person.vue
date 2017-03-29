@@ -11,7 +11,7 @@
       <div class="class-area">
         <!-- 有课程 -->
         <el-row v-show="classes[0] && role === '1'">
-          <el-col :span="6" v-for="(item, index) in classes" :offset="index > 0 ? 1 : 0" >
+          <el-col :span="6" v-for="(item, index) in classes" :offset="1" >
             <div class="lesson-card" @click="toLessonPage(index)">
               <el-card :body-style="{ padding: '10px' }" class="lesson">
                 <img :src="'http://127.0.0.1:8080'+ item.coverImg" class="image" alt="课程图片">
@@ -66,6 +66,9 @@
     .class-area {
       border: 3px solid #EFF2F7;
       border-radius: 30px;
+      el-button {
+        margin-top: 10px;
+      }
     }
 
     .lesson-card {
@@ -141,15 +144,19 @@
         role: '',
         id: '',
         classes: [],
+        attendLessonList: null,
       }
     },
     mounted() {
       Bus.$on('CHECK_LOGIN_DONE', userInfo => {
         this.role = userInfo.role;
+        this.userName = userInfo.name;
         this.id = userInfo.id;
         // 获取老师的开授课程
         if (this.role === '1') {
           this.getUserLesson();
+        } else {
+          this.getAttendLesson();
         }
       });
 
@@ -184,10 +191,17 @@
         }
       },
       toLessonPage(index) {
-        console.log(index);
         const lessonId = this.classes[index]._id;
-        console.log(lessonId);
         window.location.href = `/lesson/${lessonId}`;
+      },
+      getAttendLessonInfo() {
+        this.$http.post('/api/getAttendLessonInfo', {
+          userId: this.id,
+        }).then(res => {
+          if (res.body.data) {
+          this.attendLessonList = res.body.data.lesson;
+        }
+      })
       }
     }
   }

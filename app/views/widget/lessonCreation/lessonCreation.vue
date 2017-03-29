@@ -86,11 +86,13 @@
         coverImg: [],
         videoList: [],
         userId: '',
+        userName: '',
       }
     },
     mounted() {
       Bus.$on('CHECK_LOGIN_DONE', userInfo => {
         this.userId = userInfo.id;
+        this.userName = userInfo.name;
       });
     },
     methods: {
@@ -111,6 +113,7 @@
             coverImg: this.coverImg,
             videoList: this.videoList,
             userId: this.userId,
+            userName: this.userName,
           }).then(res => {
             if (res.body.data) {
               Bus.$emit('LESSON_CREATED', res.body.data);

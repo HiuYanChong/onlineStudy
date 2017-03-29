@@ -10,8 +10,9 @@ exports.create = async(ctx, next) => {
   const coverImg = ctx.request.body.coverImg;
   const videoList = ctx.request.body.videoList;
   const userId = ctx.request.body.userId;
+  const userName = ctx.request.body.userName;
   const createAt = new Date().toString();
-  const result = await ctx.mongo.collection('lesson').insert({ name, type, coverImg, videoList, userId, createAt });
+  const result = await ctx.mongo.collection('lesson').insertOne({ name, type, coverImg, videoList, userId, createAt, userName });
   const lessonId = result.ops[0]._id.toString();
   await dbHandler.dbOperationHander(ctx, result);
   ctx.body = {
@@ -44,7 +45,7 @@ exports.modify = async(ctx, next) => {
   );
   await dbHandler.dbOperationHander(ctx, result);
   ctx.body = {
-    viedoList,
+    videoList,
   };
 };
 
@@ -61,9 +62,55 @@ exports.searchByLessonId = async(ctx, next) => {
   const lessonId = ctx.request.body.lessonId;
   const _id = ObjectId(lessonId);
   const result = await ctx.mongo.collection('lesson').find({ _id }).toArray();
-  console.log(result);
   await dbHandler.dbOperationHander(ctx, result);
   ctx.body = {
     lesson: result,
+  };
+};
+
+exports.queryLessonCount = async(ctx, next) => {
+  const type = ctx.request.body.type || '';
+  let result;
+  if (type) {
+    result = await ctx.mongo.collection('lesson').find({ type }).toArray().length;
+    await dbHandler.dbOperationHander(ctx, result);
+  } else {
+    result = await ctx.mongo.collection('lesson').find().toArray().length;
+    await dbHandler.dbOperationHander(ctx, result);
+  }
+  console.log(result);
+  ctx.body = {
+    count: result,
+  };
+};
+
+exports.lessonList = async(ctx, next) => {
+  const type = ctx.request.body.type || '';
+  const page = ctx.request.body.page || 1;
+  const pageSize = ctx.request.body.pageSize || 10;
+  let data;
+  let result;
+  if (type) {
+    result = await ctx.mongo.collection('lesson').find({ type }).sort({ createAt: -1 })
+                      .toArray();
+    await dbHandler.dbOperationHander(ctx, result);
+  } else {
+    result = await ctx.mongo.collection('lesson').find().sort({ createAt: -1 })
+                      .toArray();
+    await dbHandler.dbOperationHander(ctx, result);
+  }
+  const totalCount = result.length;
+  const indexBegin = (page - 1) * pageSize;
+  const indexEnd = page * pageSize - 1;
+  if (indexBegin >= totalCount) {
+    data = null;
+  } else if (indexBegin < totalCount && indexEnd < totalCount) {
+    data = result.slice(indexBegin, indexEnd);
+  } else if (indexBegin < totalCount && indexEnd > totalCount) {
+    data = result.slice(indexBegin, totalCount);
+  }
+  ctx.body = {
+    lessonList: data,
+    totalCount,
   };
 };

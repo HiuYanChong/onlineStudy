@@ -24,6 +24,17 @@
         </div>
       </div>
       <div class="info-area">
+        <div class="teacher">
+          授课老师: {{ lessonInfo.userName }}
+        </div>
+        <div class="attend-class">
+          <el-button type="primary" class="button"
+                     v-show="!isAttended(lessonInfo._id)"
+                     @click.stop="attendLesson()">参加课程</el-button>
+          <el-button type="primary" class="button"
+                     v-show="isAttended(lessonInfo._id)"
+                     @click.stop="quitLesson()">退出课程</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -97,10 +108,12 @@
       return {
         userRole: '',
         userId: '',
+        userName: '',
         lessonId: '',
         lessonInfo: null,
         staticServer: 'http://127.0.0.1:8080',
         onPlay: 0,
+        attendLessonList: null,
       }
     },
     computed: {
@@ -122,6 +135,14 @@
       Bus.$on('CHECK_LOGIN_DONE', userInfo => {
         this.userRole = userInfo.role;
         this.userId = userInfo.id;
+        this.userName = userInfo.name;
+        this.$http.post('/api/getAttendLesson', {
+          userId: this.userId,
+        }).then(res => {
+          if (res.body.data) {
+            this.attendLessonList = res.body.data.lesson;
+          }
+        })
       });
 
       this.lessonId = document.getElementById('lesson-id').innerHTML;
@@ -141,6 +162,51 @@
       },
       changePlay(index) {
         this.onPlay = index;
+      },
+      attendLesson() {
+        const lessonId = this.lessonId;
+        const userId = this.userId;
+        if (userId) {
+          this.$http.post('/api/attendLesson', {
+            lessonId,
+            userId,
+          }).then(res => {
+            // 更新attendLessonList
+            if (res.body.data && res.body.data.attend) {
+              this.attendLessonList.push(res.body.data.lessonId);
+            }
+          })
+        } else {
+          //TODO
+          // 提醒登录
+        }
+      },
+      quitLesson() {
+        const lessonId = this.lessonId;
+        const userId = this.userId;
+        if (userId) {
+          this.$http.post('/api/attendLesson', {
+            lessonId,
+            userId,
+          }).then(res => {
+            if (res.body.data && res.body.data.quit) {
+              const index = this.attendLessonList.indexOf(res.body.data.lessonId);
+              console.log(index);
+              this.attendLessonList.splice(index, 1);
+            }
+          })
+        } else {
+          //TODO
+          // 提醒登录
+        }
+      },
+      isAttended(id) {
+        if (this.attendLessonList) {
+          const result = this.attendLessonList.indexOf(id);
+          return result === '-1';
+        } else {
+          return false;
+        }
       }
     }
   }

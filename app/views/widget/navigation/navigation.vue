@@ -9,6 +9,7 @@
         <el-menu-item index="2-3">后端开发</el-menu-item>
         <el-menu-item index="2-4">运维与测试</el-menu-item>
         <el-menu-item index="2-5">大数据</el-menu-item>
+        <el-menu-item index="2-6">其他</el-menu-item>
       </el-submenu>
       <el-submenu index="3" v-show="!isLogin" class="login">
         <template slot="title">登录/注册</template>
@@ -83,6 +84,27 @@
     methods: {
       handleSelect(key, keyPath) {
         switch (key.toString()) {
+          case '1':
+            window.location.href = '/';
+            break;
+          case '2-1':
+            window.location.href = `/home?type=mobile`;
+            break;
+          case '2-2':
+            window.location.href = `/home?type=FE`;
+            break;
+          case '2-3':
+            window.location.href = `/home?type=server`;
+            break;
+          case '2-4':
+            window.location.href = `/home?type=testing`;
+            break;
+          case '2-5':
+            window.location.href = `/home?type=bigData`;
+            break;
+          case '2-6':
+            window.location.href = `/home?type=other`;
+            break;
           case '3-1':
             this.$refs.registerDia.dialogFormVisible = true;
             break;

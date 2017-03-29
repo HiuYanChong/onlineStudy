@@ -1,6 +1,7 @@
 <template>
   <div>
     <navigation></navigation>
+    <lessonList></lessonList>
   </div>
 </template>
 
@@ -12,11 +13,13 @@
 <script>
   //es6
   import navigation from '../../widget/navigation/navigation.vue';
+  import lessonList from '../../widget/lessonList/lessonList.vue';
 
   export default {
     el:"#app",
     components: {
       navigation,
+      lessonList,
     },
     data () {
       return {
