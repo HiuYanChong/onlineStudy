@@ -141,7 +141,7 @@ exports.quitLesson = async(ctx, next) => {
   const result = await ctx.mongo.collection('users').updateOne(
     { _id: ObjectId(userId) },
     {
-      $pullAll: { lessonAttend: lessonId },
+      $pullAll: { lessonAttend: [lessonId] },
       $currentDate: { lastModified: true },
     }
   );
@@ -154,5 +154,18 @@ exports.quitLesson = async(ctx, next) => {
 
 
 exports.getAttendLessonInfo = async(ctx, next) =>{
-
+  const userId = ctx.request.body.userId;
+  let attendList = await ctx.mongo.collection('users').find({ _id: ObjectId(userId)}).toArray();
+  attendList = attendList[0].lessonAttend;
+  await dbHandler.dbOperationHander(ctx, attendList);
+  console.log(attendList);
+  const lessonInfo = [];
+  for (let i = 0; i < attendList.length; i++) {
+    const result = await ctx.mongo.collection('lesson').find({ _id: ObjectId(attendList[i])}).toArray();
+    await dbHandler.dbOperationHander(ctx, result);
+    lessonInfo.push(result[0]);
+  };
+  ctx.body = {
+    lesson: lessonInfo,
+  };
 };

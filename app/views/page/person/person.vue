@@ -26,13 +26,29 @@
             </div>
           </el-col>
         </el-row>
+        <!-- 学生看到的课程 -->
+        <el-row v-show="attendLessonList && role === '2'">
+          <el-col :span="6" v-for="(item, index) in attendLessonList" :offset="1" >
+            <div class="lesson-card" @click="toLesson(index)">
+              <el-card :body-style="{ padding: '10px' }" class="lesson">
+                <img :src="'http://127.0.0.1:8080'+ item.coverImg" class="image" alt="课程图片">
+                <div style="padding: 14px;">
+                  <span>{{ item.name }}</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ item.createAt }}</time>
+                  </div>
+                </div>
+              </el-card>
+            </div>
+          </el-col>
+        </el-row>
 
         <!-- 无课程 -->
         <el-row class="no-class">
           <div v-if="role === '1' && !classes[0]">
             您还没开授任何课程,快点点击创建课程按钮开创新课程吧~
           </div>
-          <div v-if="role === '2' && !classes[0]">
+          <div v-if="role === '2' && !attendLessonList">
             您还没参与任何课程,快点参与您感兴趣的课程吧~
           </div>
         </el-row>
@@ -156,7 +172,7 @@
         if (this.role === '1') {
           this.getUserLesson();
         } else {
-          this.getAttendLesson();
+          this.getAttendLessonInfo();
         }
       });
 
@@ -194,14 +210,18 @@
         const lessonId = this.classes[index]._id;
         window.location.href = `/lesson/${lessonId}`;
       },
+      toLesson(index) {
+        const lessonId = this.attendLessonList[index]._id;
+        window.location.href = `/lesson/${lessonId}`;
+      },
       getAttendLessonInfo() {
         this.$http.post('/api/getAttendLessonInfo', {
           userId: this.id,
         }).then(res => {
           if (res.body.data) {
           this.attendLessonList = res.body.data.lesson;
-        }
-      })
+          }
+        });
       }
     }
   }

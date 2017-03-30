@@ -29,10 +29,10 @@
         </div>
         <div class="attend-class">
           <el-button type="primary" class="button"
-                     v-show="!isAttended(lessonInfo._id)"
+                     v-show="!isAttended"
                      @click.stop="attendLesson()">参加课程</el-button>
           <el-button type="primary" class="button"
-                     v-show="isAttended(lessonInfo._id)"
+                     v-show="isAttended"
                      @click.stop="quitLesson()">退出课程</el-button>
         </div>
       </div>
@@ -88,6 +88,22 @@
         color: black;
       }
     }
+
+    .info-area {
+      margin-top: 30px;
+      width: 960px;
+      position: relative;
+
+      .teacher {
+        font-size: 18px;
+      }
+
+      .attend-class {
+        position: absolute;
+        top: -10px;
+        right: 10px;
+      }
+    }
   }
 
 
@@ -114,6 +130,7 @@
         staticServer: 'http://127.0.0.1:8080',
         onPlay: 0,
         attendLessonList: null,
+        socket: null,
       }
     },
     computed: {
@@ -129,6 +146,14 @@
       },
       playAddr() {
         return this.videoList[this.onPlay];
+      },
+      isAttended() {
+        if (this.attendLessonList) {
+          const result = this.attendLessonList.indexOf(this.lessonId);
+          return result !== -1;
+        } else {
+          return false;
+        }
       }
     },
     mounted() {
@@ -153,6 +178,8 @@
           this.lessonInfo = res.body.data.lesson[0];
         }
       })
+
+      this.socket = new WebSocket('ws://localhost:5000/');
     },
     methods: {
       play(index) {
@@ -185,7 +212,7 @@
         const lessonId = this.lessonId;
         const userId = this.userId;
         if (userId) {
-          this.$http.post('/api/attendLesson', {
+          this.$http.post('/api/quitLesson', {
             lessonId,
             userId,
           }).then(res => {
@@ -200,14 +227,6 @@
           // 提醒登录
         }
       },
-      isAttended(id) {
-        if (this.attendLessonList) {
-          const result = this.attendLessonList.indexOf(id);
-          return result === '-1';
-        } else {
-          return false;
-        }
-      }
     }
   }
 </script>
