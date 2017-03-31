@@ -8,6 +8,10 @@ function init(io) {
     socket.on('message', (user, msg) => {
       io.to(lessonId).emit('new message', user, msg);
     });
+
+    socket.on('code', code => {
+      io.to(lessonId).emit('new code', code);
+    });
   });
 }
 

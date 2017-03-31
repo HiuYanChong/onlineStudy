@@ -37,7 +37,10 @@
         </div>
       </div>
     </div>
-    <realTimeTalk :userName="userName" :lessonId="lessonId"></realTimeTalk>
+    <div class="operation">
+      <realTimeTalk :userName="userName" :lessonId="lessonId"></realTimeTalk>
+      <editor :lessonId="lessonId"></editor>
+    </div>
   </div>
 </template>
 
@@ -107,7 +110,9 @@
     }
   }
 
-
+  .operation {
+    position: relative;
+  }
 </style>
 
 <script>
@@ -116,12 +121,14 @@
   import realTimeTalk from '../../widget/realTimeTalk/realTimeTalk.vue';
   import Video from 'video.js';
   import Bus from '../../component/bus.vue';
+  import editor from '../../widget/editor/editor.vue'
 
   export default {
     el:"#app",
     components: {
       navigation,
       realTimeTalk,
+      editor,
     },
     data () {
       return {
@@ -157,7 +164,7 @@
         } else {
           return false;
         }
-      }
+      },
     },
     mounted() {
       Bus.$on('CHECK_LOGIN_DONE', userInfo => {
