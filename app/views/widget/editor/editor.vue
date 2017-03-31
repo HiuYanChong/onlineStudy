@@ -32,8 +32,8 @@
     right: 200px;
   }
   .CodeMirror {
-    width: 450px!important;
-    height: 400px!important;
+    width: 500px!important;
+    height: 350px!important;
     position: absolute!important;
     top: 50px!important;
     right: 100px;
