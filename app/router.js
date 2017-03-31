@@ -14,6 +14,9 @@ router.get('/person/:id', controller.page.person);
 // 课程主页
 router.get('/lesson/:id', controller.page.lesson);
 
+// 搜索结果
+router.get('/search', controller.page.search);
+
 // api
 router.post('/api/addUser', controller.user.addUser);
 router.post('/api/login', controller.user.login);
@@ -32,6 +35,7 @@ router.post('/api/searchLessonByUserId', controller.lesson.searchByUserId);
 router.post('/api/searchLessonByLessonId', controller.lesson.searchByLessonId);
 router.post('/api/queryLessonCount', controller.lesson.queryLessonCount);
 router.post('/api/lessonList', controller.lesson.lessonList);
+router.post('/api/searchLessonByName', controller.lesson.searchByName);
 
 exports.router = router;
 

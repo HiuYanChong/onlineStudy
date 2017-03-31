@@ -68,6 +68,15 @@ exports.searchByLessonId = async(ctx, next) => {
   };
 };
 
+exports.searchByName = async(ctx, next) => {
+  const lessonName = ctx.request.body.lessonName;
+  const result = await ctx.mongo.collection('lesson').find({ name: lessonName }).toArray();
+  await dbHandler.dbOperationHander(ctx, result);
+  ctx.body = {
+    lesson: result,
+  };
+};
+
 exports.queryLessonCount = async(ctx, next) => {
   const type = ctx.request.body.type || '';
   let result;
@@ -114,3 +123,4 @@ exports.lessonList = async(ctx, next) => {
     totalCount,
   };
 };
+

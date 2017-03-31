@@ -21,6 +21,14 @@
         <el-menu-item index="4-1">个人中心</el-menu-item>
         <el-menu-item index="4-2">登出</el-menu-item>
       </el-submenu>
+      <el-menu-item index="5" class="login">
+        <el-input
+            placeholder="输入课程名搜索"
+            icon="search"
+            v-model="search"
+            :on-icon-click="searchLesson">
+        </el-input>
+      </el-menu-item>
     </el-menu>
 
 
@@ -57,6 +65,7 @@
         name: '',
         role: '', // 1:老师 2:学生
         id: '',
+        search: '',
       };
     },
     components: {
@@ -126,6 +135,9 @@
             window.location.href = '/';
           }
         });
+      },
+      searchLesson(){
+        window.location.href = `/search?search=${this.search}`;
       }
     },
   }

@@ -8,7 +8,7 @@
             :src="playAddr"
             id="my-player"
             class="video-js"
-            controls preload="auto" width="960" height="600"
+            controls preload="auto" width="640" height="400"
             :poster="poster"
             data-setup='{}'>
         </video>
@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+    <realTimeTalk :userName="userName" :lessonId="lessonId"></realTimeTalk>
   </div>
 </template>
 
@@ -45,8 +46,8 @@
   @import 'app/views/style/gobal';
 
   .lesson-area {
-    width: 1200px;
-    margin: 0 auto;
+    width: 900px;
+    margin: 0 auto 0 100px;
     .lesson-name {
       font-size: 20px;
       margin:10px 0;
@@ -91,7 +92,7 @@
 
     .info-area {
       margin-top: 30px;
-      width: 960px;
+      width: 640px;
       position: relative;
 
       .teacher {
@@ -112,6 +113,7 @@
 <script>
   //es6
   import navigation from '../../widget/navigation/navigation.vue';
+  import realTimeTalk from '../../widget/realTimeTalk/realTimeTalk.vue';
   import Video from 'video.js';
   import Bus from '../../component/bus.vue';
 
@@ -119,6 +121,7 @@
     el:"#app",
     components: {
       navigation,
+      realTimeTalk,
     },
     data () {
       return {
@@ -177,9 +180,7 @@
         if (res.body.data.lesson) {
           this.lessonInfo = res.body.data.lesson[0];
         }
-      })
-
-      this.socket = new WebSocket('ws://localhost:5000/');
+      });
     },
     methods: {
       play(index) {

@@ -5,6 +5,7 @@ module.exports = {
     home: './app/views/page/home/home.js',
     person: './app/views/page/person/person.js',
     lesson: './app/views/page/lesson/lesson.js',
+    search: './app/views/page/search/search.js',
     vendor: [
       'vue', 'element-ui',
     ],

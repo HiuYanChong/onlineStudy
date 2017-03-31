@@ -36,6 +36,11 @@
   @import 'node_modules/reset-css/_reset';
   @import 'app/views/style/gobal';
 
+  .el-pagination {
+    width: 300px;
+    margin: 0 auto;
+  }
+
   .no-lesson-list {
     box-sizing: border-box;
     font-size: 18px;
@@ -51,7 +56,7 @@
     padding: 20px;
   }
 
-  el-button {
+  .el-button {
     margin-top: 10px;
   }
 
@@ -122,7 +127,6 @@
       const Url = new URL(window.location.href);
       const searchParams = Url.searchParams;
       this.lessonType = searchParams.get('type') || '';
-      console.log(this.lessonType);
       this.askForList(1);
     },
     methods: {

@@ -10,8 +10,11 @@ exports.person = async(ctx, next) => {
 
 exports.lesson = async(ctx, next) => {
   const lessonId = ctx.params.id;
-  console.log(lessonId);
   await ctx.render('page/lesson/lesson', {
     lessonId,
   });
+};
+
+exports.search = async(ctx, next) => {
+  await ctx.render('page/search/search', {});
 };

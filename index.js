@@ -25,6 +25,12 @@ const session = require('koa-session');
 const convert = require('koa-convert');
 const router = require('./app/router').router;
 const app = new koa();
+const server = require('http').createServer(app.callback());
+const handleSocket = require('./app/utils/socket');
+const io = require('socket.io')(server);
+handleSocket(io);
+server.listen(env.socketPort);
+
 
 // 链接数据库
 app.use(mongo({
@@ -80,3 +86,4 @@ if (!isProd) {
   });
 }
 module.exports = app;
+
