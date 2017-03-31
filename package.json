@@ -1,0 +1,82 @@
+{
+  "name": "online-study",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-dev": "cross-env BUILD_ENV=development node build/build.js",
+    "start-dev": "cross-env NODE_ENV=development nodemon index.js",
+    "build-prod": "cross-env BUILD_ENV=development nodemon build/build.js",
+    "start-prod": "cross-env NODE_ENV=production nodemon index.js",
+    "test": "cross-env NODE_ENV=test mocha",
+    "lint": "eslint --ext .js .vue onlineStudy",
+    "lint-fix": "eslint --fix *.js onlineStudy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiuYanChong/onlineStudy.git"
+  },
+  "keywords": [
+    "vue",
+    "koa"
+  ],
+  "author": "HiuYanChong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HiuYanChong/onlineStudy/issues"
+  },
+  "homepage": "https://github.com/HiuYanChong/onlineStudy#readme",
+  "dependencies": {
+    "async-busboy": "^0.3.4",
+    "bcrypt": "^1.0.2",
+    "element-ui": "^1.2.5",
+    "koa": "^2.0.1",
+    "koa-bodyparser": "^4.1.0",
+    "koa-convert": "^1.2.0",
+    "koa-json": "^2.0.2",
+    "koa-mongo": "^0.7.0",
+    "koa-nunjucks-2": "^3.0.0-alpha.5",
+    "koa-onerror": "^3.1.0",
+    "koa-router": "^7.0.1",
+    "koa-session": "^5.0.0",
+    "log4js": "^1.1.1",
+    "md5": "^2.2.1",
+    "mongodb": "^2.2.25",
+    "reset-css": "^2.2.0",
+    "socket.io": "^1.7.3",
+    "video.js": "^5.19.0",
+    "vue": "^2.2.1",
+    "vue-codemirror": "^3.0.3",
+    "vue-resource": "^1.2.1",
+    "vue-router": "^2.3.0",
+    "webpack": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.4.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.2.1",
+    "babel-preset-es2015": "^6.22.0",
+    "buble-loader": "^0.4.1",
+    "cross-env": "^3.2.3",
+    "css-loader": "^0.27.1",
+    "eslint": "^3.16.1",
+    "eslint-config-egg": "^3.2.0",
+    "file-loader": "^0.10.1",
+    "koa-logger": "^2.0.1",
+    "mocha": "^3.2.0",
+    "node-sass": "^4.5.0",
+    "nodemon": "^1.11.0",
+    "power-assert": "^1.4.2",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.13.2",
+    "supertest": "^3.0.0",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^11.1.4",
+    "vue-template-compiler": "^2.2.4",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "engines": {
+    "node": "7.6"
+  }
+}
